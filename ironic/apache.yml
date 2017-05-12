@@ -1,0 +1,20 @@
+#include:
+#  - service.ironic.conductor.single
+applications:
+  - apache
+parameters:
+  apache:
+    server:
+      enabled: true
+      bind:
+        address: '0.0.0.0'
+        ports:
+          - 80
+      site:
+        ironic:
+          name: 'ironic'
+          enabled: true
+          type: 'static'
+          root: '/var/www/httproot'
+          host:
+            name: ${linux:system:name}.${linux:system:domain}

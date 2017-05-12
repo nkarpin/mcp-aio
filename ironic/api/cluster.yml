@@ -1,0 +1,12 @@
+classes:
+- service.ironic.api.single
+- system.ironic.common
+parameters:
+  ironic:
+    transport_url: rabbit://openstack:${_param:rabbitmq_openstack_password}@${_param:openstack_message_queue_node01_address}:5672,openstack:${_param:rabbitmq_openstack_password}@${_param:openstack_message_queue_node01_address}:5672,openstack:${_param:rabbitmq_openstack_password}@${_param:openstack_message_queue_node03_address}:5672//openstack
+    api:
+      bind:
+        address: ${_param:cluster_local_address}
+    identity:
+      host: ${_param:cluster_vip_address}
+

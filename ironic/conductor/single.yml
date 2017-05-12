@@ -1,0 +1,9 @@
+classes:
+- service.ironic.conductor.single
+- system.ironic.common
+parameters:
+  _param:
+    ironic_baremetal_address: ${_param:single_address}
+  ironic:
+    deploy:
+      http_url: 'http://${_param:ironic_baremetal_address}'

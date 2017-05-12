@@ -1,0 +1,10 @@
+classes:
+- service.ironic.conductor.single
+- system.ironic.common
+parameters:
+  _param:
+    ironic_baremetal_address: ${_param:cluster_local_address}
+  ironic:
+    deploy:
+      http_url: 'http://${_param:ironic_baremetal_address}'
+    transport_url: rabbit://openstack:${_param:rabbitmq_openstack_password}@${_param:openstack_message_queue_node01_address}:5672,openstack:${_param:rabbitmq_openstack_password}@${_param:openstack_message_queue_node01_address}:5672,openstack:${_param:rabbitmq_openstack_password}@${_param:openstack_message_queue_node03_address}:5672//openstack

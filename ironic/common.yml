@@ -1,0 +1,26 @@
+applications:
+  - ironic
+parameters:
+  ironic:
+    version: ${_param:ironic_version}
+    transport_url: rabbit://openstack:${_param:rabbitmq_openstack_password}@${_param:single_address}:5672//openstack
+    database:
+      engine: mysql
+      host: ${_param:openstack_database_address}
+      port: 3306
+      name: ironic
+      user: ironic
+      password: ${_param:mysql_ironic_password}
+    identity:
+      engine: keystone
+      region: ${_param:openstack_region}
+      host: ${_param:single_address}
+      port: 35357
+      protocol: http
+      user: ironic
+      username: ${ironic:identity:user}
+      password: ${_param:keystone_ironic_password}
+      tenant: service
+      auth_type: password
+      user_domain_id: default
+      project_domain_id: default

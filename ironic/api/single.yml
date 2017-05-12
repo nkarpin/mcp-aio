@@ -1,0 +1,8 @@
+classes:
+- service.ironic.api.single
+- system.ironic.common
+parameters:
+  ironic:
+    api:
+      bind:
+        address: '0.0.0.0'
