@@ -1,0 +1,75 @@
+classes:
+- service.git.client
+- system.linux.system.single
+- system.linux.system.repo.mcp.salt
+- system.openssh.client.lab
+- system.salt.master.api
+- system.salt.master.git
+- system.reclass.storage.salt
+- system.salt.minion.ca.salt_master
+- system.salt.minion.cert.proxy
+- system.sphinx.server.doc.reclass
+#- system.keystone.client.single
+#- system.keystone.client.service.ceilometer
+#- system.keystone.client.service.nova21
+#- system.keystone.client.service.nova-placement
+#- system.keystone.client.service.glare
+#- system.keystone.client.service.cinder3
+#- system.keystone.client.service.ironic
+#- system.mysql.client.single
+- cluster.dev-mcp-ovs
+parameters:
+  _param:
+    apt_mk_version: nightly
+    linux_system_codename: xenial
+    reclass_data_repository: https://github.com/andreyshestakov/mcp-aio
+    reclass_data_revision: dev
+#    salt_master_environment_repository: "https://github.com/tcpcloud"
+#    salt_master_environment_revision: master
+    reclass_config_master: 192.168.10.100
+    single_address: 172.16.10.100
+    salt_master_host: ${_param:reclass_config_master}
+    salt_master_base_environment: dev
+    salt_minion_ca_host: ${linux:network:fqdn}
+    salt_api_password_hash: "$6$sGnRlxGf$al5jMCetLP.vfI/fTl3Z0N7Za1aeiexL487jAtyRABVfT3NlwZxQGVhO7S1N8OwS/34VHYwZQA8lkXwKMN/GS1"
+  linux:
+    network:
+      interface:
+        ens4:
+          enabled: true
+          type: eth
+          proto: static
+          address: ${_param:single_address}
+          netmask: 255.255.255.0
+      host:
+        ctl:
+          address: ${_param:openstack_control_address}
+          names:
+          - ctl
+          - ctl.${_param:cluster_domain}
+        cmp:
+          address: ${_param:openstack_compute_address}
+          names:
+          - cmp
+          - cmp.${_param:cluster_domain}
+  reclass:
+    storage:
+      node:
+        openstack_control_node:
+#          classes:
+#          - cluster.${_param:cluster_name}.openstack.control
+          name: ctl
+          domain: ${_param:cluster_domain}
+          params:
+            single_address: ${_param:openstack_control_address}
+            tenant_address: 10.1.0.101
+            external_address: 10.16.0.101
+        openstack_compute_node:
+#          classes:
+#          - cluster.${_param:cluster_name}.openstack.compute
+          name: cmp
+          domain: ${_param:cluster_domain}
+          params:
+            single_address: ${_param:openstack_compute_address}
+            tenant_address: 10.1.0.102
+            external_address: 10.16.0.102

@@ -1,0 +1,7 @@
+classes:
+- cluster.dev-mcp-ovs.infra.config
+parameters:
+  linux:
+    system:
+      name: cfg01
+      domain: dev-mcp-ovs.local

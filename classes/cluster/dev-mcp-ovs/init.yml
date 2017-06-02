@@ -1,0 +1,13 @@
+classes:
+- system.linux.system.single
+- cluster.virtual-mcp-ocata-ovs.infra
+
+parameters:
+  _param:
+    cluster_domain: dev-mcp-ovs.local
+    cluster_name: dev-mcp-ovs
+    cluster_public_host: 172.16.10.101
+    # infra service addresses
+    infra_config_address: 172.16.10.100
+    openstack_control_address: 172.16.10.101
+    openstack_compute_address: 172.16.10.102
