@@ -6,7 +6,11 @@ parameters:
     cluster_domain: dev-mcp-ovs.local
     cluster_name: dev-mcp-ovs
     cluster_public_host: 172.16.10.101
-    # infra service addresses
+    cluster_public_protocol: http
     infra_config_address: 172.16.10.100
     openstack_control_address: 172.16.10.101
+    openstack_message_queue_node01_address: ${_param:openstack_control_address}
     openstack_compute_address: 172.16.10.102
+    linux_system_codename: xenial
+    reclass_config_master: 192.168.10.100
+    salt_master_host: ${_param:reclass_config_master}

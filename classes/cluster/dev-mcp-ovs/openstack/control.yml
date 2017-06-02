@@ -1,0 +1,171 @@
+classes:
+- system.linux.system.lowmem
+- system.linux.system.repo.mcp.openstack
+- system.linux.system.repo.mcp.extra
+- system.linux.system.repo.saltstack.xenial
+- system.linux.storage.loopback
+- system.memcached.server.single
+- system.rabbitmq.server.single
+- system.rabbitmq.server.vhost.openstack
+- service.mysql.server.single
+- system.mysql.client
+- system.mysql.client.database.keystone
+- system.mysql.client.database.glance
+- system.mysql.client.database.nova
+- system.mysql.client.database.nova_api
+- system.mysql.client.database.cinder
+- system.mysql.client.database.heat
+- system.keystone.server.wsgi
+- system.keystone.server.single
+- system.keystone.client.single
+- system.keystone.client.service.glare
+- system.keystone.client.service.cinder3
+- system.keystone.client.service.nova21
+- system.keystone.client.service.nova-placement
+- system.glance.control.single
+- system.nova.control.single
+- system.neutron.control.openvswitch.single
+- system.heat.server.single
+- service.neutron.gateway.single
+- system.cinder.control.single
+- system.cinder.control.backend.lvm
+- service.cinder.volume.single
+- system.cinder.volume.backend.lvm
+- system.horizon.server.single
+- cluster.dev-mcp-ovs
+parameters:
+  _param:
+    openstack_version: ocata
+    openstack_region: RegionOne
+    admin_email: root@localhost
+    rabbitmq_openstack_password: workshop
+    keystone_version: ${_param:openstack_version}
+    glance_version: ${_param:openstack_version}
+    nova_version: ${_param:openstack_version}
+    neutron_version: ${_param:openstack_version}
+    cinder_version: ${_param:openstack_version}
+    heat_version: ${_param:openstack_version}
+    horizon_version: ${_param:openstack_version}
+    ironic_version: ${_param:openstack_version}
+    keystone_service_token: workshop
+    keystone_admin_password: workshop
+    keystone_ceilometer_password: workshop
+    keystone_cinder_password: workshop
+    keystone_glance_password: workshop
+    keystone_heat_password: workshop
+    keystone_neutron_password: workshop
+    keystone_nova_password: workshop
+    keystone_ironic_password: workshop
+    keystone_service_host: ${_param:single_address}
+    mysql_keystone_password: workshop
+    mysql_glance_password: workshop
+    mysql_nova_password: workshop
+    mysql_neutron_password: workshop
+    mysql_cinder_password: workshop
+    mysql_heat_password: workshop
+    mysql_ironic_password: workshop
+    heat_service_host: ${_param:single_address}
+    neutron_service_host: ${_param:single_address}
+    glance_service_host: ${_param:single_address}
+    cinder_service_host: ${_param:single_address}
+    nova_service_host: ${_param:single_address}
+    ironic_service_host: ${_param:single_address}
+    control_address: ${_param:single_address}
+    metadata_password: workshop
+    cluster_vip_address: ${_param:single_address}
+    cluster_local_address: ${_param:single_address}
+    openstack_database_address: ${_param:single_address}
+    tenant_address: ${_param:single_address}
+    heat_domain_admin_password: workshop
+    mysql_admin_user: root
+    mysql_admin_password: workshop
+    rabbitmq_secret_key: workshop
+    rabbitmq_admin_password: workshop
+    loopback_device_size: 10
+    horizon_secret_key: workshop
+    horizon_identity_encryption: none
+    horizon_identity_version: 2
+    primary_interface: ens4
+    tenant_interface: ens5
+    external_interface: ens6
+    interface_mtu: 9000
+  linux:
+    network:
+      bridge: openvswitch
+      interface:
+        dhcp_int:
+          enabled: true
+          name: ens3
+          proto: dhcp
+          type: eth
+          mtu: ${_param:interface_mtu}
+        primary_interface:
+          enabled: true
+          name: ${_param:primary_interface}
+          mtu: ${_param:interface_mtu}
+          proto: manual
+          type: eth
+        tenant_interface:
+          enabled: true
+          name: ${_param:tenant_interface}
+          mtu: ${_param:interface_mtu}
+          proto: manual
+          type: eth
+        external_interface:
+          enabled: true
+          name: ${_param:external_interface}
+          mtu: ${_param:interface_mtu}
+          proto: manual
+          type: eth
+        br-floating:
+          enabled: true
+          type: ovs_bridge
+          mtu: ${_param:interface_mtu}
+        br-mgmt:
+          enabled: true
+          type: bridge
+          proto: static
+          address: ${_param:single_address}
+          netmask: 255.255.255.0
+          mtu: ${_param:interface_mtu}
+          use_interfaces:
+          - ${_param:primary_interface}
+        br-mesh:
+          enabled: true
+          type: bridge
+          mtu: ${_param:interface_mtu}
+          proto: static
+          address: ${_param:tenant_address}
+          netmask: 255.255.255.0
+          use_interfaces:
+          - ${_param:tenant_interface}
+        float-to-ex:
+          enabled: true
+          type: ovs_port
+          mtu: ${_param:interface_mtu}
+          bridge: br-floating
+        br-ex:
+          enabled: true
+          type: bridge
+          mtu: ${_param:interface_mtu}
+          address: ${_param:external_address}
+          netmask: 255.255.255.0
+          use_interfaces:
+          - ${_param:external_interface}
+          use_ovs_ports:
+          - float-to-ex
+  mysql:
+    server:
+      version: '5.6'
+      max_connections: 20000
+  neutron:
+    gateway:
+      agent_mode: legacy
+  cinder:
+    volume:
+      cache:
+        members: ~
+  horizon:
+    server:
+      secure: False
+
