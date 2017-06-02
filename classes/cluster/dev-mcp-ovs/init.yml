@@ -1,7 +1,6 @@
 classes:
 - system.linux.system.single
-- cluster.virtual-mcp-ocata-ovs.infra
-
+- cluster.dev-mcp-ovs.infra
 parameters:
   _param:
     cluster_domain: dev-mcp-ovs.local
